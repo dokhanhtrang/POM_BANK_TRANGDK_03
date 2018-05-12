@@ -2,11 +2,15 @@ package commons;
 
 import java.util.List;
 //import java.util.Set;
+import java.util.Set;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 public class AbstractPage {
@@ -127,7 +131,7 @@ public class AbstractPage {
 		return value = alert.getText();
 	}
 
-	public void Alert(WebDriver driver, String type, String value) {
+	public void alert(WebDriver driver, String type, String value) {
 		Alert alert = driver.switchTo().alert();
 		if (type == "accept") {
 			alert.accept();
@@ -139,5 +143,117 @@ public class AbstractPage {
 			alert.sendKeys(value);
 		}
 	}
+
+	public void switchToIframe(WebDriver driver, String locator) {
+		WebElement element = driver.findElement(By.xpath(locator));
+		driver.switchTo().frame(element);
+
+	}
+
+	public void switchWindowsByID(WebDriver driver, String locator) {
+		String parentID = driver.getWindowHandle();
+		WebElement element = driver.findElement(By.xpath(locator));
+		element.click();
+		switchToChildWindow(driver, parentID);
+	}
+
+	public void switchToChildWindow(WebDriver driver, String parent) {
+
+		Set<String> allWindows = driver.getWindowHandles();
+		for (String runWindow : allWindows) {
+			if (!runWindow.equals(parent)) {
+				driver.switchTo().window(runWindow);
+				break;
+			}
+		}
+	}
+
+	public void switchWindowsByTitle(WebDriver driver, String locator, String title) {
+		WebElement element = driver.findElement(By.xpath(locator));
+		element.click();
+		switchToWindowByTitle(driver, title);
+	}
+
+	public void switchToWindowByTitle(WebDriver driver, String title) {
+		Set<String> allWindows = driver.getWindowHandles();
+		for (String runWindows : allWindows) {
+			driver.switchTo().window(runWindows);
+			String currentWin = driver.getTitle();
+			if (currentWin.equals(title)) {
+				break;
+			}
+		}
+	}
+
+	public void doubleClick(WebDriver driver, String locator) {
+		WebElement element = driver.findElement(By.xpath(locator));
+		Actions builder = new Actions(driver);
+		builder.doubleClick(element).perform();
+	}
+
+	public void hoverMouse(WebDriver driver, String locator) {
+		WebElement element = driver.findElement(By.xpath(locator));
+		Actions builder = new Actions(driver);
+		builder.moveToElement(element).perform();
+	}
+
+	public void rightClick(WebDriver driver, String locator) {
+		WebElement element = driver.findElement(By.xpath(locator));
+		Actions builder = new Actions(driver).contextClick(element);
+		builder.build().perform();
+	}
+
+	public void dragAndDrop(WebDriver driver, String locator) {
+		WebElement dragFrom = driver.findElement(By.xpath(locator));
+		WebElement target = driver.findElement(By.xpath(locator));
+		Actions builder = new Actions(driver);
+		Action dragAndDrop = builder.clickAndHold(dragFrom).moveToElement(target).release(target).build();
+		dragAndDrop.perform();
+	}
+
+	public void keyPress() {
+		//
+	}
+
+	public void upload(WebDriver driver, String filePath, String locator) {
+		driver.findElement(By.xpath(locator)).sendKeys(filePath);
+		driver.findElement(By.xpath(locator)).click();
+	}
+
+	public Object executeForBrowser(WebDriver driver, String javaSript) {
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			return js.executeScript(javaSript);
+		} catch (Exception e) {
+			e.getMessage();
+			return null;
+		}
+	}
+
+	public Object clickWebElement(WebDriver driver, WebElement element) {
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			return js.executeScript("arguments[0].click();", element);
+		} catch (Exception e) {
+			e.getMessage();
+			return null;
+		}
+	}
+
+	public Object scrollToBottomPage(WebDriver driver) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		return js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
+		
+	}
+	public Object scrollToElement(WebDriver driver) {
+		WebElement element = driver.findElement(By.id("id_of_element"));
+		return ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+	}
+	public Object removeAttributeInDOM(WebDriver driver,WebElement element, String attribute) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		return js.executeScript("arguments[0].removeAttribute('" + attribute + "');", element);
+	}
+
+	//
 
 }

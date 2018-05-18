@@ -11,7 +11,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AbstractPage {
 
@@ -243,17 +246,24 @@ public class AbstractPage {
 	public Object scrollToBottomPage(WebDriver driver) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		return js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-		
+
 	}
+
 	public Object scrollToElement(WebDriver driver) {
 		WebElement element = driver.findElement(By.id("id_of_element"));
 		return ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
 	}
-	public Object removeAttributeInDOM(WebDriver driver,WebElement element, String attribute) {
+
+	public Object removeAttributeInDOM(WebDriver driver, WebElement element, String attribute) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		return js.executeScript("arguments[0].removeAttribute('" + attribute + "');", element);
 	}
 
-	//
+	public void waitForControlVisible(WebDriver driver, String locator) {
+		By by = By.xpath(locator);
+		WebDriverWait wait = new WebDriverWait(driver, 30);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+
+	}
 
 }

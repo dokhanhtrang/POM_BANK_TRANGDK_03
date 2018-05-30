@@ -11,10 +11,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import bank.AbstractPageUI;
+import pages.DeleteCustomerPagePO;
+import pages.EditCustomerPagePO;
+import pages.HomePagePO;
+import pages.NewCustomerPagePO;
 
 public class AbstractPage {
 
@@ -49,6 +54,13 @@ public class AbstractPage {
 
 	// WebElement
 	public void clickToElement(WebDriver driver, String locator) {
+		WebElement element = driver.findElement(By.xpath(locator));
+		element.click();
+	}
+
+	public void clickToElement(WebDriver driver, String locator, String value) {
+		locator = String.format(locator, value);
+		System.out.println("Click to dynamic element= " + locator);
 		WebElement element = driver.findElement(By.xpath(locator));
 		element.click();
 	}
@@ -100,6 +112,13 @@ public class AbstractPage {
 	}
 
 	public boolean controlDisplay(WebDriver driver, String locator) {
+		WebElement element = driver.findElement(By.xpath(locator));
+		return element.isDisplayed();
+	}
+
+	public boolean controlDisplay(WebDriver driver, String locator, String value) {
+		locator = String.format(locator, value);
+		System.out.println("Control is displayed " + locator);
 		WebElement element = driver.findElement(By.xpath(locator));
 		return element.isDisplayed();
 	}
@@ -266,4 +285,43 @@ public class AbstractPage {
 
 	}
 
+	public void waitForControlVisible(WebDriver driver, String locator, String value) {
+		locator = String.format(locator, value);
+		System.out.println("Wait for dynamic control visible " + locator);
+		By by = By.xpath(locator);
+		WebDriverWait wait = new WebDriverWait(driver, 30);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+
+	}
+
+	public boolean checkAnyImageLoaded(WebDriver driver, WebElement image) {
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+		return (boolean) jsExecutor.executeScript("return arguments[0].complete"
+				+ "&& typeof arguments[0].naturalWidth != 'undefined'" + "&& arguments[0].naturalWidth > 0;");
+	}
+
+//Open Dynamic 	
+	public HomePagePO openHomePage(WebDriver driver) {
+		waitForControlVisible(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "Manager");
+		clickToElement(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "Manager");
+		return PageFactoryManger.getHomePage(driver);
+	}
+
+	public NewCustomerPagePO openNewCustomerPage(WebDriver driver) {
+		waitForControlVisible(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "New Customer");
+		clickToElement(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "New Customer");
+		return PageFactoryManger.getNewCustomerPage(driver);
+	}
+
+	public EditCustomerPagePO openEditCustomerPage(WebDriver driver) {
+		waitForControlVisible(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "Edit Customer");
+		clickToElement(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "Edit Customer");
+		return PageFactoryManger.getEditCustomerPage(driver);
+	}
+
+	public DeleteCustomerPagePO openDeleteCustomerPage(WebDriver driver) {
+		waitForControlVisible(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "Delete Customer");
+		clickToElement(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "Delete Customer");
+		return PageFactoryManger.getDeleteCustomerPage(driver);
+	}
 }

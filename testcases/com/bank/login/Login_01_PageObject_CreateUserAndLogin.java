@@ -1,16 +1,20 @@
 package com.bank.login;
 
-import org.testng.annotations.Test;
-
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 import commons.AbstractTest;
+import commons.PageFactoryManger;
+import pages.DeleteCustomerPagePO;
+import pages.EditCustomerPagePO;
 import pages.HomePagePO;
 import pages.LoginPagePO;
+import pages.NewCustomerPagePO;
 import pages.RegisterPagePO;
+import commons.AbstractPage;
 
 public class Login_01_PageObject_CreateUserAndLogin extends AbstractTest {
 	WebDriver driver;
@@ -19,22 +23,26 @@ public class Login_01_PageObject_CreateUserAndLogin extends AbstractTest {
 	private LoginPagePO loginPage;
 	private RegisterPagePO registerPage;
 	private HomePagePO homePage;
+	private NewCustomerPagePO newCustomerPage;
+	private EditCustomerPagePO editCustomerPage;
+
 
 	@Parameters({ "browser" })
 	@BeforeClass
 	public void beforeClass(String browser) {
-		driver = openMultibrowser(browser); //sai cho này
+		driver = openMultibrowser(browser);
+		loginPage = PageFactoryManger.getLoginPage(driver);
 		// loginPage
-		loginPage = new LoginPagePO(driver);
+		// loginPage = new LoginPagePO(driver);
 		mail = "khanhtrang" + randomData() + "@gmail.com";
 	}
 
-	@Test
+	@Test (enabled = true)
 	public void TC_Login_01_CreateUser() {
 		loginUrl = loginPage.getLoginUrl();
-		loginPage.clickToHereLink();
+		registerPage = loginPage.clickToHereLink();
 		// RegisterPage
-		registerPage = new RegisterPagePO(driver);
+		// registerPage = new RegisterPagePO(driver);
 		registerPage.inputToEmailIDTextbox(mail);
 		registerPage.clickToSubmitButton();
 		username = registerPage.getUserIdInfor();
@@ -49,12 +57,17 @@ public class Login_01_PageObject_CreateUserAndLogin extends AbstractTest {
 		loginPage = new LoginPagePO(driver);
 		loginPage.inputToUserIDTextbox(username);
 		loginPage.inputToPasswordTextbox(password);
-		loginPage.clickToLoginButton();
+		homePage=loginPage.clickToLoginButton();
 		// homePage
-		homePage = new HomePagePO(driver);
+		// homePage = new HomePagePO(driver);
 		Assert.assertTrue(homePage.isWelcomeMessageDisplayed());
 		// userID = driver.findElement(By.xpath("//td[contains(@style,'color:
 		// green')]")).getText();
+		//Switch
+		newCustomerPage = homePage.openNewCustomerPage(driver);
+//		newCustomerPage = openEditCustomerPage(driver);
+		
+
 
 	}
 

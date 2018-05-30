@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import commons.Constant;
+import commons.Constants;
 
 public class AbstractTest {
 	WebDriver driver;
@@ -21,7 +21,7 @@ public class AbstractTest {
 			System.setProperty("webdriver.ie.driver", ".\\resources\\IEDriverServer.exe");
 			driver = new InternetExplorerDriver();
 		}
-		driver.get(Constant.DEV_URL);
+		driver.get(Constants.DEV_URL);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 		return driver;

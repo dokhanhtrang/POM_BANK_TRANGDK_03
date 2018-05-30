@@ -17,4 +17,7 @@ public class HomePagePO extends AbstractPage {
 		waitForControlVisible(driver, HomePageUI.WELCOM_MESSAGE);
 		return controlDisplay(driver, HomePageUI.WELCOM_MESSAGE);
 	}
+//	public NewCustomerPagePO openNewCustomerPage(WebDriver driver2) {
+//		return null;
+//	}
 }

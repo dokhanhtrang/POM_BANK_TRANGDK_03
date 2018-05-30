@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 
 import bank.LoginPageUI;
 import commons.AbstractPage;
+import commons.PageFactoryManger;
 
 public class LoginPagePO extends AbstractPage {
 	WebDriver driver;
@@ -26,9 +27,10 @@ public class LoginPagePO extends AbstractPage {
 		sendkeysToElement(driver, LoginPageUI.PASSWORD_TXT, password);
 	}
 
-	public void clickToLoginButton() {
+	public HomePagePO clickToLoginButton() {
 		waitForControlVisible(driver, LoginPageUI.SUBMIT_BTN);
 		clickToElement(driver, LoginPageUI.SUBMIT_BTN);
+		return PageFactoryManger.getHomePage(driver);
 	}
 
 	public void clickToResetButton() {
@@ -36,9 +38,10 @@ public class LoginPagePO extends AbstractPage {
 		clickToElement(driver, LoginPageUI.RESET_BTN);
 	}
 
-	public void clickToHereLink() {
+	public RegisterPagePO clickToHereLink() {
 		waitForControlVisible(driver, LoginPageUI.HERE_LINK);
 		clickToElement(driver, LoginPageUI.HERE_LINK);
+		return PageFactoryManger.getRegisterPage(driver);
 	}
 
 }

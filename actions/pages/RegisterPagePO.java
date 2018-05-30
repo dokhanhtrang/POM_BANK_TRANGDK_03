@@ -2,6 +2,7 @@ package pages;
 
 import org.openqa.selenium.WebDriver;
 import commons.AbstractPage;
+import commons.PageFactoryManger;
 import bank.RegisterPageUI;
 
 public class RegisterPagePO extends AbstractPage {
@@ -31,7 +32,8 @@ public class RegisterPagePO extends AbstractPage {
 		return getTextElement(driver, RegisterPageUI.PASSWORD_TEXT);
 	}
 
-	public void openLoginPage(String loginPageUrl) {
+	public LoginPagePO openLoginPage(String loginPageUrl) {
 		openUrl(driver, loginPageUrl);
+		return PageFactoryManger.getLoginPage(driver);
 	}
 }

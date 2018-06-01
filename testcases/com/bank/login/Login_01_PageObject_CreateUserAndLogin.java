@@ -65,6 +65,7 @@ public class Login_01_PageObject_CreateUserAndLogin extends AbstractTest {
 		// openDeleteCustomerPage
 		deleteCustomerPage = editCustomerPage.openDeleteCustomerPage(driver);
 		// openLogout
+		homePage = editCustomerPage.openHomePage(driver);
 		loginPage = deleteCustomerPage.openLogOutPage(driver);
 	}
 

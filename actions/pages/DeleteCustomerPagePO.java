@@ -2,7 +2,9 @@ package pages;
 
 import org.openqa.selenium.WebDriver;
 
-public class DeleteCustomerPagePO {
+import commons.AbstractPage;
+
+public class DeleteCustomerPagePO extends AbstractPage {
 	WebDriver driver;
 
 	// contructor

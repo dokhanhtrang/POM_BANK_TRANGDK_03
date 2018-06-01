@@ -2,7 +2,9 @@ package pages;
 
 import org.openqa.selenium.WebDriver;
 
-public class NewCustomerPagePO {
+import commons.AbstractPage;
+
+public class NewCustomerPagePO extends AbstractPage{
 	WebDriver driver;
 
 	// contructor

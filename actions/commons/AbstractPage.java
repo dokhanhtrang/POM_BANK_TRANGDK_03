@@ -19,6 +19,7 @@ import bank.AbstractPageUI;
 import pages.DeleteCustomerPagePO;
 import pages.EditCustomerPagePO;
 import pages.HomePagePO;
+import pages.LoginPagePO;
 import pages.NewCustomerPagePO;
 
 public class AbstractPage {
@@ -70,6 +71,13 @@ public class AbstractPage {
 		element.clear();
 		element.sendKeys(value);
 	}
+	public void sendkeysToElement(WebDriver driver, String locator, String value, String value1) {
+		locator = String.format(locator, value1);
+		System.out.println("Sendkeys to dynamic element " + locator);
+		WebElement element = driver.findElement(By.xpath(locator));
+		element.clear();
+		element.sendKeys(value);
+	}
 
 	public void selectItemInDropDown(WebDriver driver, String locator, String value) {
 		Select select = new Select(driver.findElement(By.xpath(locator)));
@@ -104,7 +112,24 @@ public class AbstractPage {
 		}
 	}
 
+	public void checkCheckbox(WebDriver driver, String locator, String value) {
+		locator = String.format(locator, value);
+		System.out.println("Check to dynamic element " + locator);
+		WebElement element = driver.findElement(By.xpath(locator));
+		if (!element.isSelected()) {
+			element.click();
+		}
+	}
+
 	public void unCheckCheckbox(WebDriver driver, String locator) {
+		WebElement element = driver.findElement(By.xpath(locator));
+		if (element.isSelected()) {
+			element.click();
+		}
+	}
+	public void unCheckCheckbox(WebDriver driver, String locator, String value) {
+		locator = String.format(locator, value);
+		System.out.println("UnCheck to dynamic element " + locator);
 		WebElement element = driver.findElement(By.xpath(locator));
 		if (element.isSelected()) {
 			element.click();
@@ -300,7 +325,7 @@ public class AbstractPage {
 				+ "&& typeof arguments[0].naturalWidth != 'undefined'" + "&& arguments[0].naturalWidth > 0;");
 	}
 
-//Open Dynamic 	
+	// Open Dynamic
 	public HomePagePO openHomePage(WebDriver driver) {
 		waitForControlVisible(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "Manager");
 		clickToElement(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "Manager");
@@ -324,4 +349,13 @@ public class AbstractPage {
 		clickToElement(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "Delete Customer");
 		return PageFactoryManger.getDeleteCustomerPage(driver);
 	}
+
+	public LoginPagePO openLogOutPage(WebDriver driver) {
+		waitForControlVisible(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "Log out");
+		clickToElement(driver, AbstractPageUI.DYNAMIC_PAGE_LINK, "Log out");
+		acceptAlert(driver);
+		waitForControlVisible(driver, AbstractPageUI.LOGIN_FORM_LINK);
+		return PageFactoryManger.getLoginPage(driver);
+	}
+
 }

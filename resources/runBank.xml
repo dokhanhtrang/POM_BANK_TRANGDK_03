@@ -12,10 +12,10 @@
 		<class name="com.bank.login.Login_01_PageObject_CreateUserAndLogin" />
 		</classes>
 	</test>-->
-	<!-- <test name="Run on Chrome Browser">
+<!-- 	 <test name="Run on Chrome Browser">
 		<parameter name="browser" value="chrome" />
 		<classes>
 		<class name="com.bank.login.Login_01_PageObject_CreateUserAndLogin" />
 		</classes>
-	</test> -->
+	</test>  -->
 </suite> <!-- Suite -->

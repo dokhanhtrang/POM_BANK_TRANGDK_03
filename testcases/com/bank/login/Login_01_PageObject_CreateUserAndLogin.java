@@ -1,7 +1,6 @@
 package com.bank.login;
 
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
@@ -14,7 +13,6 @@ import pages.HomePagePO;
 import pages.LoginPagePO;
 import pages.NewCustomerPagePO;
 import pages.RegisterPagePO;
-import commons.AbstractPage;
 
 public class Login_01_PageObject_CreateUserAndLogin extends AbstractTest {
 	WebDriver driver;
@@ -25,7 +23,7 @@ public class Login_01_PageObject_CreateUserAndLogin extends AbstractTest {
 	private HomePagePO homePage;
 	private NewCustomerPagePO newCustomerPage;
 	private EditCustomerPagePO editCustomerPage;
-
+	private DeleteCustomerPagePO deleteCustomerPage;
 
 	@Parameters({ "browser" })
 	@BeforeClass
@@ -33,16 +31,14 @@ public class Login_01_PageObject_CreateUserAndLogin extends AbstractTest {
 		driver = openMultibrowser(browser);
 		loginPage = PageFactoryManger.getLoginPage(driver);
 		// loginPage
-		// loginPage = new LoginPagePO(driver);
 		mail = "khanhtrang" + randomData() + "@gmail.com";
 	}
 
-	@Test (enabled = true)
+	@Test(enabled = true)
 	public void TC_Login_01_CreateUser() {
 		loginUrl = loginPage.getLoginUrl();
 		registerPage = loginPage.clickToHereLink();
 		// RegisterPage
-		// registerPage = new RegisterPagePO(driver);
 		registerPage.inputToEmailIDTextbox(mail);
 		registerPage.clickToSubmitButton();
 		username = registerPage.getUserIdInfor();
@@ -53,27 +49,28 @@ public class Login_01_PageObject_CreateUserAndLogin extends AbstractTest {
 	@Test
 	public void TC_Login_02_LoginApp() {
 		driver.get(loginUrl);
-		// loginPage
 		loginPage = new LoginPagePO(driver);
 		loginPage.inputToUserIDTextbox(username);
 		loginPage.inputToPasswordTextbox(password);
-		homePage=loginPage.clickToLoginButton();
-		// homePage
-		// homePage = new HomePagePO(driver);
-		Assert.assertTrue(homePage.isWelcomeMessageDisplayed());
-		// userID = driver.findElement(By.xpath("//td[contains(@style,'color:
-		// green')]")).getText();
-		//Switch
+		homePage = loginPage.clickToLoginButton();
+		//verify
+		verifyTrue(homePage.isWelcomeMessageDisplayed());
+		// Switch
+		// openNewCustomerPage
 		newCustomerPage = homePage.openNewCustomerPage(driver);
-//		newCustomerPage = openEditCustomerPage(driver);
-		
-
-
+		// openEditCustomerPage
+		editCustomerPage = newCustomerPage.openEditCustomerPage(driver);
+		// openHomePage
+		homePage = editCustomerPage.openHomePage(driver);
+		// openDeleteCustomerPage
+		deleteCustomerPage = editCustomerPage.openDeleteCustomerPage(driver);
+		// openLogout
+		loginPage = deleteCustomerPage.openLogOutPage(driver);
 	}
 
 	@AfterClass
 	public void afterClass() {
-		driver.close();
+		closeBrowser(driver);
 	}
 
 }

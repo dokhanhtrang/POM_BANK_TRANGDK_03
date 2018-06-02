@@ -31,6 +31,10 @@ public class RegisterPagePO extends AbstractPage {
 		waitForControlVisible(driver, RegisterPageUI.PASSWORD_TEXT);
 		return getTextElement(driver, RegisterPageUI.PASSWORD_TEXT);
 	}
+	public String getEmailID() {
+		waitForControlVisible(driver, RegisterPageUI.EMAILID_TXT);
+		return getTextElement(driver, RegisterPageUI.EMAILID_TXT);
+	}
 
 	public LoginPagePO openLoginPage(String loginPageUrl) {
 		openUrl(driver, loginPageUrl);

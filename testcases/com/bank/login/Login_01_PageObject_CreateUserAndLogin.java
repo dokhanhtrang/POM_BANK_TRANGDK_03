@@ -17,7 +17,7 @@ import pages.RegisterPagePO;
 public class Login_01_PageObject_CreateUserAndLogin extends AbstractTest {
 	WebDriver driver;
 	String loginUrl;
-	String username, password, userID, mail;
+	String username, password, userID, mail, customerName, dob, add, city, state, pin, mobile, customerID;
 	private LoginPagePO loginPage;
 	private RegisterPagePO registerPage;
 	private HomePagePO homePage;
@@ -32,43 +32,64 @@ public class Login_01_PageObject_CreateUserAndLogin extends AbstractTest {
 		loginPage = PageFactoryManger.getLoginPage(driver);
 		// loginPage
 		mail = "khanhtrang" + randomData() + "@gmail.com";
+		customerName = "Khanh Trang";
+		dob ="06/28/1995";
+		add = city = state = "Ha Noi";
+		pin = "12345689";
+		mobile = "123" + randomData();
+		
 	}
 
 	@Test(enabled = true)
-	public void TC_Login_01_CreateUser() {
+	public void TC_01_CreateUser() {
 		loginUrl = loginPage.getLoginUrl();
 		registerPage = loginPage.clickToHereLink();
-		// RegisterPage
 		registerPage.inputToEmailIDTextbox(mail);
 		registerPage.clickToSubmitButton();
 		username = registerPage.getUserIdInfor();
 		password = registerPage.getPasswordInfo();
-		System.out.println("UserName: " + username + "/n Password: " + password);
 	}
 
 	@Test
-	public void TC_Login_02_LoginApp() {
+	public void TC_02_LoginApp() {
 		driver.get(loginUrl);
 		loginPage = new LoginPagePO(driver);
 		loginPage.inputToUserIDTextbox(username);
 		loginPage.inputToPasswordTextbox(password);
 		homePage = loginPage.clickToLoginButton();
-		//verify
 		verifyTrue(homePage.isWelcomeMessageDisplayed());
-		// Switch
-		// openNewCustomerPage
-		newCustomerPage = homePage.openNewCustomerPage(driver);
-		// openEditCustomerPage
 		editCustomerPage = newCustomerPage.openEditCustomerPage(driver);
-		// openHomePage
 		homePage = editCustomerPage.openHomePage(driver);
-		// openDeleteCustomerPage
 		deleteCustomerPage = editCustomerPage.openDeleteCustomerPage(driver);
-		// openLogout
 		homePage = editCustomerPage.openHomePage(driver);
 		loginPage = deleteCustomerPage.openLogOutPage(driver);
 	}
 
+	@Test
+	public void TC_03_CreateCustomer() throws Exception{
+		newCustomerPage = homePage.openNewCustomerPage(driver);
+		newCustomerPage.inputCustomerName(customerName);
+		newCustomerPage.checkGender();
+		newCustomerPage.inputDob(dob);
+		newCustomerPage.inputAdd(add);
+		newCustomerPage.inputCity(city);
+		newCustomerPage.inputState(state);
+		newCustomerPage.inputPIN(pin);
+		newCustomerPage.inputMobile(mobile);
+		newCustomerPage.inputMail(mail);
+		newCustomerPage.inputPassword(password);
+		newCustomerPage.clickToSubmit();
+		Thread.sleep(5000);
+		customerID = newCustomerPage.getCustomerID();
+	}
+	@Test
+	public void TC_04_EditCustomer() {
+		editCustomerPage = newCustomerPage.openEditCustomerPage(driver);
+		editCustomerPage.inputCustomerid(customerID);
+		editCustomerPage.clickToSubmitAcc();
+		editCustomerPage.clickToSubmit();
+	}
+	
 	@AfterClass
 	public void afterClass() {
 		closeBrowser(driver);
